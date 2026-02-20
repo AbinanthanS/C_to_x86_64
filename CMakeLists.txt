@@ -4,7 +4,7 @@ project(c2x64 LANGUAGES CXX)
 # ---- Compiler / build settings ----
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS ON)  # GNU++20 for MinGW; set OFF if you want strict -std=c++20
+set(CMAKE_CXX_EXTENSIONS ON)  # GNU++20 on MinGW; set OFF for strict -std=c++20
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Warnings
@@ -14,13 +14,7 @@ else()
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
-# ---- Main compiler executable ----
-add_executable(c2x64
-  src/main.cpp
-)
-
-# ---- Tests (doctest single header) ----
-# Expect: external/doctest/doctest.h
+# ---- Doctest single-header (vendored) ----
 if (NOT EXISTS "${CMAKE_SOURCE_DIR}/external/doctest/doctest.h")
   message(FATAL_ERROR
     "Missing doctest header.\n"
@@ -29,21 +23,33 @@ if (NOT EXISTS "${CMAKE_SOURCE_DIR}/external/doctest/doctest.h")
   )
 endif()
 
+# ---- Library containing compiler modules ----
+add_library(c2x64_lib
+  src/lexer/lexer.cpp
+)
+
+target_include_directories(c2x64_lib PUBLIC
+  "${CMAKE_SOURCE_DIR}/include"
+)
+
+# ---- Main compiler executable ----
+add_executable(c2x64
+  src/main.cpp
+)
+
+target_link_libraries(c2x64 PRIVATE c2x64_lib)
+
+# ---- Tests executable ----
 add_executable(c2x64_tests
   tests/test_sanity.cpp
+  tests/test_lexer.cpp
 )
 
 target_include_directories(c2x64_tests PRIVATE
   "${CMAKE_SOURCE_DIR}/external/doctest"
 )
 
-# ---- MinGW: avoid runtime DLL dependency during test execution ----
-# This links libstdc++ and libgcc statically, so CTest won't fail with 0xc0000139.
-if (MINGW)
-  target_link_options(c2x64 PRIVATE -static-libstdc++ -static-libgcc)
-  target_link_options(c2x64_tests PRIVATE -static-libstdc++ -static-libgcc)
-endif()
+target_link_libraries(c2x64_tests PRIVATE c2x64_lib)
 
-# ---- CTest ----
 enable_testing()
-add_test(NAME c2x64_sanity COMMAND c2x64_tests)
+add_test(NAME c2x64_all COMMAND c2x64_tests)

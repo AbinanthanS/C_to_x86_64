@@ -11,34 +11,15 @@ struct SourceLocation {
 
 enum class TokenType {
     // Special
-    End,
-    Invalid,
-
+    End, Invalid,
     // Identifiers + literals
-    Identifier,
-    Number,
-
+    Identifier, Number,
     // Keywords
-    KwInt,
-    KwReturn,
-    KwIf,
-    KwElse,
-    KwWhile,
-    KwFor,
-
+    KwInt, KwReturn, KwIf, KwElse, KwWhile, KwFor,
     // Operators
-    Plus, Minus, Star, Slash, Percent,
-    Assign,        // =
-    EqEq,          // ==
-    NotEq,         // !=
-    Less, LessEq,  // < <=
-    Greater, GreaterEq, // > >=
-
+    Plus, Minus, Star, Slash, Percent, Assign, EqEq, NotEq, Less, LessEq, Greater, GreaterEq,
     // Punctuation
-    LParen, RParen,
-    LBrace, RBrace,
-    Semicolon,
-    Comma,
+    LParen, RParen,LBrace, RBrace,Semicolon,Comma,
 };
 
 inline const char* token_type_name(TokenType t) {

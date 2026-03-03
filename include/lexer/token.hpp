@@ -64,4 +64,4 @@ struct Token {
     int64_t number_value = 0; // valid if type == Number
 };
 
-} // namespace c2x64
+} 

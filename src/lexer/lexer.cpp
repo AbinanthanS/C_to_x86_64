@@ -38,7 +38,7 @@ void Lexer::advance() {
 void Lexer::skip_whitespace_and_comments() {
     while (!eof()) {
         char c = current();
-
+        
         // whitespace
         if (c == ' ' || c == '\t' || c == '\r' || c == '\n') {
             advance();
@@ -138,9 +138,9 @@ Token Lexer::lex_token() {
         case ';': advance(); return make_simple(TokenType::Semicolon, ";", start);
         case ',': advance(); return make_simple(TokenType::Comma, ",", start);
         default:
-            // unknown char
-            advance();
-            return make_simple(TokenType::Invalid, std::string(1, c), start);
+        // unknown char
+        advance();
+        return make_simple(TokenType::Invalid, std::string(1, c), start);
     }
 }
 

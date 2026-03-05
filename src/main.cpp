@@ -25,8 +25,8 @@ Options:
 )";
 }
 
-static bool read_file_to_string(const std::string& path, std::string& out) {
-    std::ifstream in(path, std::ios::in | std::ios::binary);
+static bool read_file_to_string(const string& path, string& out) {
+    ifstream in(path, ios::in | ios::binary);
     if (!in) return false;
 
     std::ostringstream ss;
@@ -47,15 +47,15 @@ static int run_lex(const std::string& path) {
     while (true) {
         c2x64::Token t = lex.next();
 
-        std::cout << t.loc.line << ":" << t.loc.col << "  "
+        cout << t.loc.line << ":" << t.loc.col << "  "
                   << c2x64::token_type_name(t.type)
                   << "  '" << t.lexeme << "'";
 
         if (t.type == c2x64::TokenType::Number) {
-            std::cout << "  value=" << t.number_value;
+            cout << "  value=" << t.number_value;
         }
 
-        std::cout << "\n";
+        cout << "\n";
 
         if (t.type == c2x64::TokenType::End) break;
     }
@@ -88,10 +88,10 @@ int main(int argc, char** argv) {
 
     // default: expect an input file (future phases)
     if (args.size() == 1) {
-        std::cerr << "error: compile pipeline not implemented yet (try --lex)\n";
+        cerr << "error: compile pipeline not implemented yet (try --lex)\n";
         return 2;
     }
 
-    std::cerr << "error: unknown arguments (try --help)\n";
+    cerr << "error: unknown arguments (try --help)\n";
     return 1;
 }

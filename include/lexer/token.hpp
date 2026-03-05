@@ -2,6 +2,9 @@
 #include <cstdint>
 #include <string>
 #include <string_view>
+
+using namespace std;
+
 namespace c2x64 {
 
 struct SourceLocation {
@@ -59,7 +62,7 @@ inline const char* token_type_name(TokenType t) {
 
 struct Token {
     TokenType type = TokenType::Invalid;
-    std::string lexeme;
+    string lexeme;
     SourceLocation loc{};
     int64_t number_value = 0; // valid if type == Number
 };

@@ -29,16 +29,16 @@ static bool read_file_to_string(const string& path, string& out) {
     ifstream in(path, ios::in | ios::binary);
     if (!in) return false;
 
-    std::ostringstream ss;
+    ostringstream ss;
     ss << in.rdbuf();
     out = ss.str();
     return true;
 }
 
-static int run_lex(const std::string& path) {
-    std::string input;
+static int run_lex(const string& path) {
+    string input;
     if (!read_file_to_string(path, input)) {
-        std::cerr << "error: could not open file: " << path << "\n";
+        cerr << "error: could not open file: " << path << "\n";
         return 1;
     }
 
@@ -48,11 +48,11 @@ static int run_lex(const std::string& path) {
         c2x64::Token t = lex.next();
 
         cout << t.loc.line << ":" << t.loc.col << "  "
-                  << c2x64::token_type_name(t.type)
-                  << "  '" << t.lexeme << "'";
+             << c2x64::token_type_name(t.type)
+             << "  '" << t.lexeme << "'";
 
         if (t.type == c2x64::TokenType::Number) {
-            cout << "  value=" << t.number_value;
+            cout << "  value =" << t.number_value;
         }
 
         cout << "\n";

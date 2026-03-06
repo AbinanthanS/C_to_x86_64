@@ -3,33 +3,36 @@
 #include <string>
 #include "lexer/token.hpp"
 using namespace std;
+
 namespace c2x64 {
 
-class Lexer {
-public:
-    explicit Lexer(string_view input);
+    class Lexer {
+        public:
 
-    Token next();
-    Token peek();
+            explicit Lexer(string_view input);
 
-private:
-    Token lex_token();
+            Token next();
+            Token peek();
 
-    char current() const;
-    char lookahead() const;
-    bool eof() const;
+        private:
 
-    void advance();
-    void skip_whitespace_and_comments();
+            Token lex_token();
 
-    Token make_simple(TokenType type, string lexeme, SourceLocation start);
+            char current() const;
+            char lookahead() const;
+            bool eof() const;
 
-    string_view input_;
-    size_t i_ = 0;
-    SourceLocation loc_{1,1};
+            void advance();
+            void skip_whitespace_and_comments();
 
-    bool has_peek_ = false;
-    Token peek_tok_;
-};
+            Token make_simple(TokenType type, string lexeme, SourceLocation start);
 
-} // namespace c2x64
+            string_view input_;
+            size_t i_ = 0;
+            SourceLocation loc_{1,1};
+
+            bool has_peek_ = false;
+            Token peek_tok_;
+    };
+
+} 

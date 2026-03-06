@@ -60,7 +60,7 @@ namespace c2x64 {
     Token Lexer::make_simple(TokenType type, string lexeme, SourceLocation start) {
         Token t;
         t.type = type;
-        t.lexeme = std::move(lexeme);
+        t.lexeme = move(lexeme);
         t.loc = start;
         return t;
     }
@@ -142,7 +142,7 @@ namespace c2x64 {
             default:
             // unknown char
             advance();
-            return make_simple(TokenType::Invalid, std::string(1, c), start);
+            return make_simple(TokenType::Invalid, string(1, c), start);
         }
     }
 

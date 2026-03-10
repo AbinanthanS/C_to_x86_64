@@ -4,8 +4,14 @@
 #include <string>
 #include <vector>
 
+
 #include "lexer/lexer.hpp"
 #include "lexer/token.hpp"
+
+#include "parser/parser.hpp"
+#include "ast/printer.hpp"
+#include "lexer/tokenize.hpp"
+
 
 using namespace std;
 
@@ -63,6 +69,26 @@ static int run_lex(const string& path) {
     return 0;
 }
 
+static int run_parse(const std::string& path) {
+
+    std::string input;
+
+    if (!read_file_to_string(path, input)) {
+        std::cerr << "error: could not open file\n";
+        return 1;
+    }
+
+    auto tokens = c2x64::tokenize(input);
+
+    c2x64::Parser parser(tokens);
+
+    auto fn = parser.parse_function();
+
+    c2x64::print_ast(*fn);
+
+    return 0;
+}
+
 int main(int argc, char** argv) {
     vector<string> args(argv + 1, argv + argc);
 
@@ -85,7 +111,10 @@ int main(int argc, char** argv) {
     if (args.size() == 2 && args[0] == "--lex") {
         return run_lex(args[1]);
     }
-
+    //--parse <file>
+    if (args.size() == 2 && args[0] == "--parse") {
+        return run_parse(args[1]);
+    }
     // default: expect an input file (future phases)
     if (args.size() == 1) {
         cerr << "error: compile pipeline not implemented yet (try --lex)\n";

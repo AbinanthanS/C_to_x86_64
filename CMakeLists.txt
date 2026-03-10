@@ -26,6 +26,8 @@ endif()
 # ---- Library containing compiler modules ----
 add_library(c2x64_lib
   src/lexer/lexer.cpp
+  src/parser/parser.cpp
+  src/ast/printer.cpp
 )
 
 target_include_directories(c2x64_lib PUBLIC
@@ -43,6 +45,7 @@ target_link_libraries(c2x64 PRIVATE c2x64_lib)
 add_executable(c2x64_tests
   tests/test_sanity.cpp
   tests/test_lexer.cpp
+  tests/test_parser.cpp
 )
 
 target_include_directories(c2x64_tests PRIVATE

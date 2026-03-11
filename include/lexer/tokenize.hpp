@@ -5,22 +5,24 @@
 
 #include "lexer/lexer.hpp"
 
+using namespace std;
+
 namespace c2x64 {
 
-inline std::vector<Token> tokenize(const std::string& src) {
-    Lexer lex(src);
+    inline vector<Token> tokenize(const string& src) {
+        Lexer lex(src);
 
-    std::vector<Token> tokens;
+        vector<Token> tokens;
 
-    while (true) {
-        Token t = lex.next();
-        tokens.push_back(t);
+        while (true) {
+            Token t = lex.next();
+            tokens.push_back(t);
 
-        if (t.type == TokenType::End)
-            break;
+            if (t.type == TokenType::End)
+                break;
+        }
+
+        return tokens;
     }
-
-    return tokens;
-}
 
 }

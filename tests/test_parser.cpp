@@ -3,16 +3,17 @@
 #include "lexer/lexer.hpp"
 #include "parser/parser.hpp"
 
+using namespace std;
 using namespace c2x64;
 
 TEST_CASE("parse simple function") {
 
-    std::string src =
+    string src =
         "int main() { return 42; }";
 
     Lexer lex(src);
 
-    std::vector<Token> tokens;
+    vector<Token> tokens;
 
     while (true) {
         Token t = lex.next();

@@ -2,86 +2,87 @@
 
 #include <stdexcept>
 
+using namespace std;
+
 namespace c2x64 {
 
-Parser::Parser(std::vector<Token> tokens)
-    : tokens_(std::move(tokens)) {}
+    Parser::Parser(vector<Token> tokens) : tokens_(move(tokens)) {}
 
-Token& Parser::peek() {
-    return tokens_[pos_];
-}
-
-Token& Parser::advance() {
-    return tokens_[pos_++];
-}
-
-bool Parser::match(TokenType type) {
-    if (peek().type == type) {
-        advance();
-        return true;
-    }
-    return false;
-}
-
-// --------------------------
-
-std::unique_ptr<FunctionDecl> Parser::parse_function() {
-    if (!match(TokenType::KwInt))
-        throw std::runtime_error("expected 'int'");
-
-    Token name = advance();
-
-    if (name.type != TokenType::Identifier)
-        throw std::runtime_error("expected function name");
-
-    if (!match(TokenType::LParen))
-        throw std::runtime_error("expected '('");
-
-    if (!match(TokenType::RParen))
-        throw std::runtime_error("expected ')'");
-
-    if (!match(TokenType::LBrace))
-        throw std::runtime_error("expected '{'");
-
-    auto func = std::make_unique<FunctionDecl>();
-    func->name = name.lexeme;
-
-    while (!match(TokenType::RBrace)) {
-        func->body.push_back(parse_statement());
+    Token& Parser::peek() {
+        return tokens_[pos_];
     }
 
-    return func;
-}
+    Token& Parser::advance() {
+        return tokens_[pos_++];
+    }
 
-// --------------------------
+    bool Parser::match(TokenType type) {
+        if (peek().type == type) {
+            advance();
+            return true;
+        }
+        return false;
+    }
 
-std::unique_ptr<Stmt> Parser::parse_statement() {
-    if (peek().type == TokenType::KwReturn)
-        return parse_return();
+    // --------------------------
 
-    throw std::runtime_error("unknown statement");
-}
+    unique_ptr<FunctionDecl> Parser::parse_function() {
+        if (!match(TokenType::KwInt))
+            throw runtime_error("expected 'int'");
 
-std::unique_ptr<Stmt> Parser::parse_return() {
-    advance(); // return
+        Token name = advance();
 
-    auto expr = parse_expression();
+        if (name.type != TokenType::Identifier)
+            throw runtime_error("expected function name");
 
-    if (!match(TokenType::Semicolon))
-        throw std::runtime_error("expected ';'");
+        if (!match(TokenType::LParen))
+            throw runtime_error("expected '('");
 
-    return std::make_unique<ReturnStmt>(std::move(expr));
-}
+        if (!match(TokenType::RParen))
+            throw runtime_error("expected ')'");
 
-// --------------------------
+        if (!match(TokenType::LBrace))
+            throw runtime_error("expected '{'");
 
-std::unique_ptr<Expr> Parser::parse_expression() {
-    Token t = advance();
+        auto func = make_unique<FunctionDecl>();
+        func->name = name.lexeme;
 
-    if (t.type == TokenType::Number)
-        return std::make_unique<NumberExpr>(t.number_value);
+        while (!match(TokenType::RBrace)) {
+            func->body.push_back(parse_statement());
+        }
 
-    throw std::runtime_error("expected expression");
-}
+        return func;
+    }
+
+    // --------------------------
+
+    unique_ptr<Stmt> Parser::parse_statement() {
+        if (peek().type == TokenType::KwReturn)
+            return parse_return();
+
+        throw runtime_error("unknown statement");
+    }
+
+    unique_ptr<Stmt> Parser::parse_return() {
+        advance(); // return
+
+        auto expr = parse_expression();
+
+        if (!match(TokenType::Semicolon))
+            throw runtime_error("expected ';'");
+
+        return make_unique<ReturnStmt>(move(expr));
+    }
+
+    // --------------------------
+
+    unique_ptr<Expr> Parser::parse_expression() {
+        Token t = advance();
+
+        if (t.type == TokenType::Number)
+            return make_unique<NumberExpr>(t.number_value);
+
+        throw runtime_error("expected expression");
+    }
 
 }

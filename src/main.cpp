@@ -69,12 +69,12 @@ static int run_lex(const string& path) {
     return 0;
 }
 
-static int run_parse(const std::string& path) {
+static int run_parse(const string& path) {
 
-    std::string input;
+    string input;
 
     if (!read_file_to_string(path, input)) {
-        std::cerr << "error: could not open file\n";
+        cerr << "error: could not open file\n";
         return 1;
     }
 

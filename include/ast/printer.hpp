@@ -4,6 +4,6 @@
 
 namespace c2x64 {
 
-void print_ast(const FunctionDecl& fn);
+    void print_ast(const FunctionDecl& fn);
 
 }

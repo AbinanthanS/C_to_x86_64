@@ -18,8 +18,7 @@ namespace c2x64 {
             Token t = lex.next();
             tokens.push_back(t);
 
-            if (t.type == TokenType::End)
-                break;
+            if (t.type == TokenType::End) break;
         }
 
         return tokens;
